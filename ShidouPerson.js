@@ -1,4 +1,4 @@
-/** 今月分のデータDictから、各生徒のデータDict "shidouStudent" を作成 */
+/** 今月分のデータDictから、各生徒のデータDict "shidouStudent/shidouTutor" を作成 */
 class ShidouPerson{
   //key: 生徒ID
   //value: 授業データ
@@ -13,13 +13,13 @@ class ShidouPerson{
    */
   constructor(personType, shidouMonth, PersonData) {
 
-    for (let i = 0; i < shidouMonth.date.length; i++) {  //今月行われた全授業を生徒毎に振り分けていく  
-      const personName = shidouMonth.student[i];
+    for (let i = 0; i < shidouMonth.date.length; i++) {  //今月行われた全授業を各人に振り分けていく  
+      const personName = shidouMonth[personType][i];
       const findID = PersonData.name.indexOf(personName);
       if (findID == -1) {
         throw new Error("Cannot find "+ personType +" in database");
       }
-      const personID = PersonData.studentID[findID]; //生徒名をIDに変換
+      const personID = PersonData[personType+"ID"][findID]; //名前をIDに変換
       let hourly
       if (personType == "student") hourly = 5900; //授業料
       else hourly = PersonData.wage[findID] //給料
