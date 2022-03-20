@@ -29,7 +29,7 @@ class ShidouPerson{
       }
       for (let key in shidouMonth) {
         if (key == "money") {
-          this[personID][key].push(shidouMonth.mins[i] * hourly / 60);
+          this[personID][key].push(Math.round(shidouMonth.mins[i] * hourly / 600)*10);
         } else {
           this[personID][key].push(shidouMonth[key][i]);
         }
