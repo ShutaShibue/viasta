@@ -34,7 +34,7 @@ function main() {
   
   /** PART TWO: PDF作成 */
 
-  const studentURLs = pdfStudents(shidouStudent, spreadsheet, invoiceS, studentData, inputYear, inputMonth, inputDeadline) //各生徒に対して、請求書のPDFを作成する
+  const studentURLs = SetPdfData("student", shidouStudent, spreadsheet, invoiceS, studentData, inputYear, inputMonth, inputDeadline) //各生徒に対して、請求書のPDFを作成する
   Logger.log(studentURLs);
 
   //各講師に対して、給与明細のPDFを作成する
