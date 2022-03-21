@@ -1,7 +1,7 @@
 /** 今月分のデータDictから、各生徒のデータDict "shidouStudent/shidouTutor" を作成 */
 class ShidouPerson{
   //key: 生徒ID
-  //value: 授業データ
+  //value: 授業データ<ShidouData>
   //Dict<生徒ID, Dict<shidouMonth.keys(), data>>
 
   /**
