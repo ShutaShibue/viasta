@@ -11,7 +11,10 @@ class ShidouData {
     this.mins = []
     this.money = []
   }
-  month(shidou, inputYear, inputMonth){
+
+  month(ss, dates) {
+    const shidou = ss.getSheetByName('shidou').getDataRange().getValues();
+    
     for (let row = 2; row < shidou.length; row++) {
       // Shidou: Column Numbers
       // 0 タイムスタンプ
@@ -24,7 +27,7 @@ class ShidouData {
       // 7 指導内容
   
       const day = dayjs.dayjs(Utilities.formatDate(shidou[row][4], "JST", "yyyy/MM/dd"));
-      if (day.year() == inputYear && day.month() + 1 == inputMonth) {    //その年・月のデータであれば、Dictに授業のデータを入れる
+      if (day.year() == dates.yr && day.month() + 1 == dates.mo) {    //その年・月のデータであれば、Dictに授業のデータを入れる
   
         //その授業についてのデータを格納
         this.tutor.push(shidou[row][2]);
@@ -49,7 +52,7 @@ class ShidouData {
   
         //異常に長い授業時間は、一応レポート
         if (mins > 180) {
-          Logger.log("タイムスタンプ：　", shidou[row][0], "　に3時間以上の授業時間が確認されました。");
+          Logger.log("タイムスタンプ：", shidou[row][0], "　に3時間以上の授業時間が確認されました。");
         }
   
         //指導時間のデータも格納

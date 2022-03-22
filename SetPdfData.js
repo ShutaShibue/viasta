@@ -1,5 +1,6 @@
 /** "shidouStudent"と請求書テンプレートをもとに、PDFを作成し、そのリンクを配列で出力 */
-function SetPdfData(pType, shidouPerson, spreadsheet, invoiceS, personalData, inputYear, inputMonth, inputDeadline) {
+function SetPdfData(pType, shidouPerson, ss, personalData, dates) {
+    const invoiceS = ss.getSheetByName('invoice');
     const studentURLs = {
       name : [],
       email : [],
@@ -19,7 +20,7 @@ function SetPdfData(pType, shidouPerson, spreadsheet, invoiceS, personalData, in
       Logger.log("小計: "+smallTotal);
   
       //請求書テンプレをコピーして各人の名前のシートを作成
-      const paySheet = invoiceS.copyTo(spreadsheet); //new sheet
+      const paySheet = invoiceS.copyTo(ss); //new sheet
       paySheet.setName(name);
       
       
@@ -51,21 +52,21 @@ function SetPdfData(pType, shidouPerson, spreadsheet, invoiceS, personalData, in
       //シート上部に情報を設定する
       //newInvoice.getRange(13,3).setValue("¥" + bigTotal + "—");
       paySheet.getRange('B3').setValue(name);    
-      const month = ('0' + inputMonth).slice(-2) //0埋め, 5月→05月
-      paySheet.getRange('C7').setValue("Viasta Online Consulting — " + inputYear + "年" + month +"月分");
-      const invoiceID = inputYear  + inputMonth + "-"+ pID;
+      const month = ('0' + dates.mo).slice(-2) //0埋め, 5月→05月
+      paySheet.getRange('C7').setValue("Viasta Online Consulting — " + dates.mo + "年" + month +"月分");
+      const invoiceID = dates.yr  + dates.mo + "-"+ pID;
       paySheet.getRange('I3').setValue(invoiceID);
   
       Utilities.sleep(1000); //1秒待機（待機中に情報を更新）
       SpreadsheetApp.flush(); //挿入したシートの情報更新
    
       //PDF化
-      const ssId = spreadsheet.getId();                                    //スプレッドシートIDを取得
+      const ssId = ss.getId();                                    //スプレッドシートIDを取得
       const sheetId = paySheet.getSheetId();                             //取引先のシートIDを取得
       const folderurl = paySheet.getRange('M3').getValue();              //newInvoiceのセルJ2の値（PDF保管先のフォルダURL）
       const folder = DriveApp.getFolderById(folderurl);                    //PDF保管先のfolderを設定
       PDFexport(ssId, sheetId, endLine, folder, invoiceID, name);
-      spreadsheet.deleteSheet(paySheet);
+      ss.deleteSheet(paySheet);
   
       //OUTPUT
       const pDataID = personalData.name.indexOf(name)
