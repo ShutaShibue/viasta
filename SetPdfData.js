@@ -54,8 +54,8 @@ function SetPdfData(pType, shidouPerson, ss, personalData, dates) {
       //newInvoice.getRange(13,3).setValue("¥" + bigTotal + "—");
       paySheet.getRange('B3').setValue(name);    
       const month = ('0' + dates.mo).slice(-2) //0埋め, 5月→05月
-      paySheet.getRange('C7').setValue("Viasta Online Consulting — " + dates.mo + "年" + month +"月分");
-      const invoiceID = dates.yr  + dates.mo + "-"+ pID;
+      paySheet.getRange('C7').setValue("Viasta Online Consulting — " + dates.yr + "年" + month +"月分");
+      const invoiceID = dates.yr  + month + "-"+ pID;
       paySheet.getRange('I3').setValue(invoiceID);
   
       Utilities.sleep(1000); //1秒待機（待機中に情報を更新）
