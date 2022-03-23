@@ -19,10 +19,24 @@ function main() {
 
   /* 指導報告書をDictで管理 */
   const shidouMonth = new ShidouData();
-  shidouMonth.month(ss, dates)//全指導報告書データから今月分のデータを抽出し、Dict "shidouMonth" を作成
+  shidouMonth.import(ss, dates)//全指導報告書データから今月分のデータを抽出し、Dict "shidouMonth" を作成
   
-  const shidouStudent = new ShidouPerson("student", shidouMonth, studentData); //今月分のデータDictから、各生徒のデータDict "shidouStudent" を作成
-  const shidouTutor = new ShidouPerson("tutor", shidouMonth, tutorData); //今月分のデータDictから、各講師のデータDict "shidouTutor" を作成
+  /* 調整管理データを取得 */
+  const adjustData = new AdjustData()
+  adjustData.import(ss, dates)
+
+  /* 指導外のWorkデータを取得 */
+  const workData = new WorkData()
+  workData.import(ss, dates)
+
+  const shidouStudent = new ShidouPerson("student");
+  shidouStudent.addShidou(shidouMonth, studentData) //今月分のデータDictから、各生徒のデータDict "shidouStudent" を作成
+  shidouStudent.addAdjust(adjustData, studentData)
+
+  const shidouTutor = new ShidouPerson("tutor"); //今月分のデータDictから、各講師のデータDict "shidouTutor" を作成
+  shidouTutor.addShidou(shidouMonth, tutorData)
+  //shidouTutor.addWork(workData, tutorData)
+
   Logger.log(shidouStudent);
   Logger.log(shidouTutor);
   

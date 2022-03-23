@@ -7,7 +7,8 @@ function SetPdfData(pType, shidouPerson, ss, personalData, dates) {
       url : [],
     };
   
-    for (var pID in shidouPerson) {
+  for (var pID in shidouPerson) {
+      if(typeof(shidouPerson[pID])=="string") continue
       const data = shidouPerson[pID];
       const name = data[pType][0];  //修正
       const length = data.date.length;
