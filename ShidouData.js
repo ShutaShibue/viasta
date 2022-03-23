@@ -12,7 +12,7 @@ class ShidouData {
     this.money = []
   }
 
-  month(ss, dates) {
+  import(ss, dates) {
     const shidou = ss.getSheetByName('shidou').getDataRange().getValues();
     
     for (let row = 2; row < shidou.length; row++) {
