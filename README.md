@@ -22,3 +22,11 @@
 
 - 正しい情報が記載されるようにSetPdfData.gsを作成、更新
   
+## 3/23
+
+  <https://github.com/ShutaShibue/viasta/tree/92ed0c6ba4de066401816ad401e7694fbe19fce1>
+
+- 調整管理データ、仕事データを保持するクラスを追加
+- 調整管理データを各人のデータに追加するメソッドをShidouPersonクラスに追加
+- 次回のタスク：調整管理データをSetPdfDataで記載する
+  
