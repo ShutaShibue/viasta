@@ -3,7 +3,7 @@ function main() {
 
   /** PART 1: 指導報告書データの処理 */
 
-  /* Variable一覧 */  
+  /* Variable一覧 */
   const ss = SpreadsheetApp.getActiveSpreadsheet();  //ファイル
   const invoiceS = ss.getSheetByName('invoice');  //インプットの年月
   const dates = getDates(invoiceS) //年、月、期限を取得
@@ -52,7 +52,7 @@ function getDates(invoiceS) {
   const dates = {
     yr: invoiceS.getRange("M7").getValue(),
     mo: invoiceS.getRange("M8").getValue(),
-    deadline : invoiceS.getRange("M6").getValue()
+    deadline: invoiceS.getRange("M6").getValue()
   }
   return dates
 }

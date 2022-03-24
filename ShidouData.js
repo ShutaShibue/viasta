@@ -1,6 +1,6 @@
 /** 全指導報告書データから今月分のデータを抽出し、Dict "shidouMonth" を作成 */
 class ShidouData {
-  constructor(){
+  constructor() {
     //construct dict of this month w key:each col - val: List of classes
     this.tutor = []
     this.student = []
@@ -52,7 +52,7 @@ class ShidouData {
   
         //異常に長い授業時間は、一応レポート
         if (mins > 180) {
-          Logger.log("タイムスタンプ："+ shidou[row][0]+ "　に3時間以上の授業時間が確認されました。");
+          Logger.log("タイムスタンプ：" + shidou[row][0] + "　に3時間以上の授業時間が確認されました。");
         }
   
         //指導時間のデータも格納
