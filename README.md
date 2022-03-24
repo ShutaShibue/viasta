@@ -30,3 +30,10 @@
 - 調整管理データを各人のデータに追加するメソッドをShidouPersonクラスに追加
 - 次回のタスク：調整管理データをSetPdfDataで記載する
   
+## 3/24
+
+<https://github.com/ShutaShibue/viasta/tree/88db19a19c2f4bb1ca1802b272d33ee9ed755053>
+
+![ss](img/README_2022-03-24-13-41-54.png)
+
+- 明細に調整管理データを反映
