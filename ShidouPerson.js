@@ -49,10 +49,8 @@ class ShidouPerson{
         this[id].outline = []
         this[id].adjustMoney = 0
       }
-      for (let key in adjustData) {
-        this[id].outline.push(adjustData[key][i])
-        this[id].adjustMoney += adjustData[key][i]
-      }
+        this[id].outline.push(adjustData["outline"][i])
+        this[id].adjustMoney += adjustData["adjustMoney"][i]
     }
   }
 
