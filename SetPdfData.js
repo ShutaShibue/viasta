@@ -14,12 +14,14 @@ function SetPdfData(pType, shidouPerson, ss, personalData, dates) {
       const length = data.date.length;
         Logger.log(pType + " is " + name);
       //小計の計算
-      var smallTotal = 0;
+      let smallTotal = 0;
       for (var i = 0; i < length; i++) {
         smallTotal += data.money[i];
-      }
-      Logger.log("小計: "+smallTotal);
-  
+    }
+    let othertotal = 0
+    if (pType = "student" && data.adjustMoney) othertotal = data.adjustMoney
+      
+    const bigTotal = smallTotal + othertotal
       //請求書テンプレをコピーして各人の名前のシートを作成
       const paySheet = invoiceS.copyTo(ss); //new sheet
       paySheet.setName(name);
@@ -46,12 +48,13 @@ function SetPdfData(pType, shidouPerson, ss, personalData, dates) {
       paySheet.getRange(17,7, length).setValues(data.material.map(x => [x]));
       paySheet.getRange(17,9, length).setValues(data.money.map(x => [x]));
       paySheet.getRange(17 + length,9).setValue(smallTotal);
-      //newInvoice.getRange(17 + length + 1,9).setValue(other);
-      //newInvoice.getRange(17 + length + 2,9).setValue(bigTotal);
+      paySheet.getRange(17 + length + 1,9).setValue(othertotal);
+      paySheet.getRange(17 + length + 2, 9).setValue(bigTotal);
+      paySheet.getRange(17 + length + 5,2).setValue(data.outline.map(x => [x])); //伸ばす
   
       
       //シート上部に情報を設定する
-      //newInvoice.getRange(13,3).setValue("¥" + bigTotal + "—");
+      paySheet.getRange(13,3).setValue("¥" + bigTotal + "—");
       paySheet.getRange('B3').setValue(name);    
       const month = ('0' + dates.mo).slice(-2) //0埋め, 5月→05月
       paySheet.getRange('C7').setValue("Viasta Online Consulting — " + dates.yr + "年" + month +"月分");
