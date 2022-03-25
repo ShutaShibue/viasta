@@ -51,12 +51,12 @@ function SetPdfData(pType, shidouPerson, ss, personalData, dates) {
     if (data.outline) {
       othertotal = data.adjustMoney
 
-      for (let i = 0; i < data.outline.length; i++) {
+      for (let i = 1; i < data.outline.length; i++) {
         paySheet.getRange(endLine + ':17').activate();
-        paySheet.insertRowsAfter(endLine, 1);
-        paySheet.getRange(`B${endLine + 1}:I${endLine + 1}`).activate().mergeAcross();
+        paySheet.insertRowsAfter(endLine-1, 1);
+        paySheet.getRange(`B${endLine}:I${endLine}`).activate().mergeAcross();
       }
-      paySheet.getRange(endLine, 2, data.outline.length).setValue(data.outline.map(x => [x])); //伸ばす
+      paySheet.getRange(endLine, 2, data.outline.length).setValues(data.outline.map(x => [x])); //伸ばす
     }
     
     const bigTotal = smallTotal + othertotal
@@ -79,7 +79,7 @@ function SetPdfData(pType, shidouPerson, ss, personalData, dates) {
     const sheetId = paySheet.getSheetId();                             //取引先のシートIDを取得
     const folderurl = paySheet.getRange('M3').getValue();              //newInvoiceのセルJ2の値（PDF保管先のフォルダURL）
     const folder = DriveApp.getFolderById(folderurl);                    //PDF保管先のfolderを設定
-    PDFexport(ssId, sheetId, endLine, folder, invoiceID, name);
+    PDFexport(ssId, sheetId, endLine+data.outline.length, folder, invoiceID, name);
     ss.deleteSheet(paySheet);
   
     //OUTPUT
