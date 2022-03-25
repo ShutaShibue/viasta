@@ -10,49 +10,59 @@ function SetPdfData(pType, shidouPerson, ss, personalData, dates) {
   for (var pID in shidouPerson) {
     if (typeof (shidouPerson[pID]) == "string") continue
     const data = shidouPerson[pID];
-    const name = data[pType][0];  //修正
-    const length = data.date.length;
-    Logger.log(pType + " is " + name);
-    //小計の計算
-    let smallTotal = 0;
-    for (var i = 0; i < length; i++) {
-      smallTotal += data.money[i];
-    }
-    let othertotal = 0
-    if (pType = "student" && data.adjustMoney) othertotal = data.adjustMoney
-      
-    const bigTotal = smallTotal + othertotal
-    //請求書テンプレをコピーして各人の名前のシートを作成
+    const name = data[pType][0];  //修正 調整管理データのみの場合、data.student.name.lengthは1。
+    
     const paySheet = invoiceS.copyTo(ss); //new sheet
-    paySheet.setName(name);
-      
-      
-    //データを入れるために、フィールドを拡張
-    for (var i = 1; i < length; i++) {
-      paySheet.getRange('17:17').activate();
-      paySheet.insertRowsAfter(paySheet.getActiveRange().getLastRow(), 1);
-      paySheet.getRange('E18:F18').activate().mergeAcross();
-      paySheet.getRange('G18:H18').activate().mergeAcross();
+    paySheet.setName(name);    //請求書テンプレをコピーして各人の名前のシートを作成
+    let smallTotal = 0;
+    let othertotal = 0
+    let endLine = 23
+
+    if (data.date.length) { //指導データがある場合
+      endLine -= 1  //指導データ0の場合だけ空列ができるため 
+      const length = data.date.length;
+      endLine += length;
+      //小計の計算
+      for (var i = 0; i < length; i++) {
+        smallTotal += data.money[i];
+      }
+
+      //データを入れるために、フィールドを拡張
+      for (let i = 1; i < length; i++) {
+        paySheet.getRange('17:17').activate();
+        paySheet.insertRowsAfter(paySheet.getActiveRange().getLastRow(), 1);
+        paySheet.getRange('E18:F18').activate().mergeAcross();
+        paySheet.getRange('G18:H18').activate().mergeAcross();
+      }
+      //var bigTotal = smallTotal + other;
+  
+  
+      //シートのメインの配列に値を設定する
+      const stConvert = pType === "student" ? "tutor" : "student"
+      paySheet.getRange(17, 2, length).setValues(data.date.map(x => [x]));
+      paySheet.getRange(17, 3, length).setValues(data.startTime.map(x => [x]));
+      paySheet.getRange(17, 4, length).setValues(data.endTime.map(x => [x]));
+      paySheet.getRange(17, 5, length).setValues(data[stConvert].map(x => [x]));
+      paySheet.getRange(17, 7, length).setValues(data.material.map(x => [x]));
+      paySheet.getRange(17, 9, length).setValues(data.money.map(x => [x]));
+      paySheet.getRange(17 + length, 9).setValue(smallTotal);
     }
-  
-    //var bigTotal = smallTotal + other;
-  
-    const endLine = 22 + length;
-  
-    //シートのメインの配列に値を設定する
-    const stConvert = pType === "student" ? "tutor" : "student"
-    paySheet.getRange(17, 2, length).setValues(data.date.map(x => [x]));
-    paySheet.getRange(17, 3, length).setValues(data.startTime.map(x => [x]));
-    paySheet.getRange(17, 4, length).setValues(data.endTime.map(x => [x]));
-    paySheet.getRange(17, 5, length).setValues(data[stConvert].map(x => [x]));
-    paySheet.getRange(17, 7, length).setValues(data.material.map(x => [x]));
-    paySheet.getRange(17, 9, length).setValues(data.money.map(x => [x]));
-    paySheet.getRange(17 + length, 9).setValue(smallTotal);
-    paySheet.getRange(17 + length + 1, 9).setValue(othertotal);
-    paySheet.getRange(17 + length + 2, 9).setValue(bigTotal);
-    paySheet.getRange(17 + length + 5, 2).setValue(data.outline.map(x => [x])); //伸ばす
-  
-      
+
+    if (data.outline) {
+      othertotal = data.adjustMoney
+
+      for (let i = 0; i < data.outline.length; i++) {
+        paySheet.getRange(endLine + ':17').activate();
+        paySheet.insertRowsAfter(paySheet.getActiveRange().getLastRow(), 1);
+        paySheet.getRange(`B${endLine + 1}:I${endLine + 1}`).activate().mergeAcross();
+      }
+      paySheet.getRange(endLine, 2).setValue(data.outline.map(x => [x])); //伸ばす
+    }
+    
+    const bigTotal = smallTotal + othertotal
+    paySheet.getRange(endLine - 4 , 9).setValue(othertotal); 
+    paySheet.getRange(endLine - 3, 9).setValue(bigTotal);
+
     //シート上部に情報を設定する
     paySheet.getRange(13, 3).setValue("¥" + bigTotal + "—");
     paySheet.getRange('B3').setValue(name);

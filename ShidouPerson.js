@@ -44,7 +44,10 @@ class ShidouPerson {
       }
       const id = studentData[this.pType + "ID"][findID]; //名前をIDに変換
     
-      if (!this[id]) this[id] = new ShidouData() // if new student
+      if (!this[id]) {
+        this[id] = new ShidouData() // if new student
+        this[id].student.push(name)
+      }
       if (this[id].outline == undefined) { //if new adjust
         this[id].outline = []
         this[id].adjustMoney = 0
@@ -57,9 +60,9 @@ class ShidouPerson {
   addWork(workData, tutorData) {
     if (this.pType != "tutor") throw new Error("Method can't be used for " + this.pType)
     
-    for (let i = 0; i < workData.tutor.length; i++) {  //AdjustDataを各人に振り分けていく
+    for (let i = 0; i < workData.tutor.length; i++) {  //WorkDataを各人に振り分けていく
       const name = workData.tutor[i]
-      const findID = studentData.name.indexOf(name);
+      const findID = tutorData.name.indexOf(name);
       if (findID == -1) {
         throw new Error("Cannot find " + this.pType + " in database");
       }
