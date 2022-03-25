@@ -53,10 +53,10 @@ function SetPdfData(pType, shidouPerson, ss, personalData, dates) {
 
       for (let i = 0; i < data.outline.length; i++) {
         paySheet.getRange(endLine + ':17').activate();
-        paySheet.insertRowsAfter(paySheet.getActiveRange().getLastRow(), 1);
+        paySheet.insertRowsAfter(endLine, 1);
         paySheet.getRange(`B${endLine + 1}:I${endLine + 1}`).activate().mergeAcross();
       }
-      paySheet.getRange(endLine, 2).setValue(data.outline.map(x => [x])); //伸ばす
+      paySheet.getRange(endLine, 2, data.outline.length).setValue(data.outline.map(x => [x])); //伸ばす
     }
     
     const bigTotal = smallTotal + othertotal
