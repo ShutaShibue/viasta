@@ -33,6 +33,12 @@ class ShidouPerson {
     }
   }
 
+  
+  /**
+   * 
+   * @param {AdjustData} adjustData 
+   * @param {StudentData} studentData 
+   */
   addAdjust(adjustData, studentData) {
     if (this.pType != "student") throw new Error("Method can't be used for " + this.pType)
     
@@ -52,11 +58,16 @@ class ShidouPerson {
         this[id].outline = []
         this[id].adjustMoney = 0
       }
-      this[id].outline.push(adjustData["outline"][i])
-      this[id].adjustMoney += adjustData["adjustMoney"][i]
+      this[id].outline.push(adjustData.outline[i])
+      this[id].adjustMoney += adjustData.adjustMoney[i]
     }
   }
 
+  /**
+   * 
+   * @param {WorkData} workData 
+   * @param {TutorData} tutorData 
+   */
   addWork(workData, tutorData) {
     if (this.pType != "tutor") throw new Error("Method can't be used for " + this.pType)
     
@@ -67,8 +78,17 @@ class ShidouPerson {
         throw new Error("Cannot find " + this.pType + " in database");
       }
       const id = tutorData[this.pType + "ID"][findID]; //名前をIDに変換
-      
-      //処理未追加
+
+      if (!this[id]) {
+        this[id] = new ShidouData() // if new student
+        this[id].tutor.push(name)
+      }      
+      if (this[id].salary == undefined) { //if new adjust
+        this[id].salary = 0
+        this[id].specialPay = 0
+      }
+      this[id].salary += workData.salary[i]
+      this[id].specialPay += workData.specialPay[i]
     }
   }
 }

@@ -35,7 +35,7 @@ function main() {
 
   const shidouTutor = new ShidouPerson("tutor"); //今月分のデータDictから、各講師のデータDict "shidouTutor" を作成
   shidouTutor.addShidou(shidouMonth, tutorData)
-  //shidouTutor.addWork(workData, tutorData)
+  shidouTutor.addWork(workData, tutorData)
 
   Logger.log(shidouStudent);
   Logger.log(shidouTutor);
@@ -46,6 +46,8 @@ function main() {
   Logger.log(studentURLs);
 
   //各講師に対して、給与明細のPDFを作成する
+  const tutorURLs = SetPdfData("tutor", shidouTutor, ss, tutorData, dates) //各講師に対して、給与のPDFを作成する
+  Logger.log(tutorURLs)
 };
 
 function getDates(invoiceS) {
