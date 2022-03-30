@@ -14,8 +14,6 @@ function main() {
   tutorData.import(ss)
   const studentData = new StudentData();  //StudentDataクラスをインスタンス化
   studentData.import(ss)  //生徒データを取り入れて、各項目をKeyにDict"studentData"を作成
-  Logger.log(studentData);
-  Logger.log(tutorData);
 
   /* 指導報告書をDictで管理 */
   const shidouMonth = new ShidouData();
@@ -42,11 +40,9 @@ function main() {
   
   /** PART TWO: PDF作成 */
 
-  const studentURLs = SetPdfData("student", shidouStudent, ss, studentData, dates) //各生徒に対して、請求書のPDFを作成する
+  const studentURLs = SetPdfData(shidouStudent, ss, studentData, dates) //各生徒に対して、請求書のPDFを作成する
   Logger.log(studentURLs);
-
-  //各講師に対して、給与明細のPDFを作成する
-  const tutorURLs = SetPdfData("tutor", shidouTutor, ss, tutorData, dates) //各講師に対して、給与のPDFを作成する
+  const tutorURLs = SetPdfData(shidouTutor, ss, tutorData, dates) //各講師に対して、給与のPDFを作成する
   Logger.log(tutorURLs)
 };
 

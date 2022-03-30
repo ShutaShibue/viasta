@@ -1,14 +1,12 @@
 /** "shidouStudent"と請求書テンプレートをもとに、PDFを作成し、そのリンクを配列で出力 */
-function SetPdfData(pType, shidouPerson, ss, personalData, dates) {
+function SetPdfData(shidouPerson, ss, personalData, dates) {
 
+  const pType = shidouPerson.pType
   let invoiceS
-  if (pType == "student") { //請求書または給与明細のテンプレートを取得
-    invoiceS = ss.getSheetByName('invoice');
-  } else {
-    invoiceS = ss.getSheetByName('payment')
-  }
+  if (pType == "student") invoiceS = ss.getSheetByName('invoice') //請求書または給与明細のテンプレートを取得
+  else invoiceS = ss.getSheetByName('payment')
 
-  const studentURLs = {
+  const personURLs = {
     name: [],
     email: [],
     url: [],
@@ -94,8 +92,8 @@ function SetPdfData(pType, shidouPerson, ss, personalData, dates) {
     if (pType == "student") title = "Viasta Online Consulting — " + dates.yr + "年" + month + "月分"
     else title = "Viasta 個別指導料金 — " + dates.yr + "年" + month + "月分"
     paySheet.getRange('C7').setValue(title);
-    const invoiceID = dates.yr + month + "-" + pID;
-    paySheet.getRange('I3').setValue(invoiceID);
+    const documentID = dates.yr + month + "-" + pID;
+    paySheet.getRange('I3').setValue(documentID);
   
     Utilities.sleep(1000); //1秒待機（待機中に情報を更新）
     SpreadsheetApp.flush(); //挿入したシートの情報更新
@@ -105,15 +103,15 @@ function SetPdfData(pType, shidouPerson, ss, personalData, dates) {
     const sheetId = paySheet.getSheetId();                             //取引先のシートIDを取得
     const folderurl = paySheet.getRange('M3').getValue();              //newInvoiceのセルJ2の値（PDF保管先のフォルダURL）
     const folder = DriveApp.getFolderById(folderurl);                    //PDF保管先のfolderを設定
-    PDFexport(ssId, sheetId, endofShidou + noteLength, folder, invoiceID, name);
+    PDFexport(ssId, sheetId, endofShidou + noteLength, folder, documentID, name);
     ss.deleteSheet(paySheet);
   
     //OUTPUT
     const pDataID = personalData.name.indexOf(name)
-    studentURLs.name.push(name);
-    studentURLs.email.push(personalData.email[pDataID]);
-    studentURLs.url.push("null");
+    personURLs.name.push(name);
+    personURLs.email.push(personalData.email[pDataID]);
+    personURLs.url.push("");
   }
-  Logger.log(studentURLs);
+  Logger.log(personURLs);
 }
   
