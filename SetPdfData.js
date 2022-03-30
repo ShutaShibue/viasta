@@ -60,7 +60,7 @@ function SetPdfData(shidouPerson, ss, personalData, dates) {
       if (data.salary) contents.push("固定給")
       if (data.specialPay) contents.push("時間外給与")
       noteLength = contents.length
-      write(contents)
+      writeNotes(contents)
     }
 
     if (data.outline != undefined) {  //生徒で調整管理データがある場合
