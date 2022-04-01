@@ -57,8 +57,8 @@ function SetPdfData(shidouPerson, ss, personalData, dates) {
     if (data.salary != undefined) {   //講師で授業外の給与がある場合
       othertotal = data.salary + data.specialPay
       const contents = []
-      if (data.salary) contents.push("固定給")
-      if (data.specialPay) contents.push("時間外給与")
+      if (data.salary) contents.push("固定給 " + data.salary + "円")
+      if (data.specialPay) contents.push("時間外給与 " + data.specialPay + "円")
       noteLength = contents.length
       writeNotes(contents)
     }
