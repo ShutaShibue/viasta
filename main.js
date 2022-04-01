@@ -48,9 +48,9 @@ function main() {
 
 function getDates(invoiceS) {
   const dates = {
-    yr: invoiceS.getRange("M7").getValue(),
-    mo: invoiceS.getRange("M8").getValue(),
-    deadline: invoiceS.getRange("M6").getValue()
+    yr: invoiceS.getRange("M4").getValue(),
+    mo: invoiceS.getRange("M5").getValue(),
+    deadline: invoiceS.getRange("M3").getValue()
   }
   return dates
 }

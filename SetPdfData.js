@@ -84,7 +84,7 @@ function SetPdfData(shidouPerson, ss, personalData, dates) {
     paySheet.getRange(endofShidou - 3, 9).setValue(bigTotal);
 
     //シート上部に情報を設定する
-    paySheet.getRange(13, 3).setValue("¥" + bigTotal + "—");
+    paySheet.getRange(13, 3).setValue("¥" + bigTotal.toLocaleString() + "—");
     paySheet.getRange('B3').setValue(name);
     const month = ('0' + dates.mo).slice(-2) //0埋め, 5月→05月
 
@@ -101,7 +101,7 @@ function SetPdfData(shidouPerson, ss, personalData, dates) {
     //PDF化
     const ssId = ss.getId();                                    //スプレッドシートIDを取得
     const sheetId = paySheet.getSheetId();                             //取引先のシートIDを取得
-    const folderurl = paySheet.getRange('M3').getValue();              //newInvoiceのセルJ2の値（PDF保管先のフォルダURL）
+    const folderurl = "1PCAo6dRgeronSrtDliIaN4Qluik1wc78" //固定
     const folder = DriveApp.getFolderById(folderurl);                    //PDF保管先のfolderを設定
     PDFexport(ssId, sheetId, endofShidou + noteLength, folder, documentID, name);
     ss.deleteSheet(paySheet);
