@@ -112,6 +112,6 @@ function SetPdfData(shidouPerson, ss, personalData, dates) {
     personURLs.email.push(personalData.email[pDataID]);
     personURLs.url.push("");
   }
-  Logger.log(personURLs);
+  return personURLs;
 }
   

@@ -34,9 +34,6 @@ function main() {
   const shidouTutor = new ShidouPerson("tutor"); //今月分のデータDictから、各講師のデータDict "shidouTutor" を作成
   shidouTutor.addShidou(shidouMonth, tutorData)
   shidouTutor.addWork(workData, tutorData)
-
-  Logger.log(shidouStudent);
-  Logger.log(shidouTutor);
   
   /** PART TWO: PDF作成 */
 
