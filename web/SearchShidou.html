@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    table{
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+    th, td{
+        padding: 10px 20px;
+        border: 1px solid #000;
+    }
+</style>
+
+</head>
+
+<form>
+    <input type="month" id="date">
+    <input type="text" id="name">
+    <input type="button" id="button" value="検索">
+</form>
+<body id="body">
+
+<script>
+    const transpose = a => a[0].map((_, c) => a.map(r => r[c]));
+const spreadSheetID = "1Ft1V_8317tgvymN3SunaxzbNMlLSWOiZJGYmPS7CQlc"
+const sheetName = "tutor"
+const API_key = "AIzaSyAQ2nK0O4bibdEKkqitR76Y1w-fA-lRtM0"
+const url = "https://sheets.googleapis.com/v4/spreadsheets/" + spreadSheetID + "/values/" + sheetName + "?key=" + API_key
+
+// date format is not decided, yy/mm?
+async function Search(date, name) {
+    console.log(date + name);
+    return new Promise(function (resolve, reject) {
+        fetch(url)
+            .then(async res => {
+                const n = await res.json()
+                const info = n.values
+                info.shift() //remove head
+                const data = transpose(info) // swap low col
+                /*
+                    0: Timestamp
+                    1: 指導有無
+                    2: Tutor name
+                    3: Student name
+                    4: Date
+                    5: Start
+                    6: End
+                    7: Content
+                */
+                const nameFlg = data[2].map(e => e === name ? true : false) // returns Bool list
+                const dFlg = data[4].map((e, i) => nameFlg[i] && e === date ? true : false) // returns Bool list
+                const filtered = info.filter((e, i) => dFlg[i]) // Remove data that didn't match
+                const out = []
+                filtered.forEach(val => {
+                    out.push(val.filter((_, i) => ![0, 2].includes(i)))
+                })
+            
+                resolve(out)
+            })
+        }).catch(e => console.error(e))
+}
+
+function CreateRow(texts, type, parent) {
+    const row = document.createElement('tr');
+
+    while (texts.length) {
+        const text = texts.shift()
+        const heading = document.createElement(type);
+        heading.innerHTML = text
+        row.appendChild(heading);
+    }
+    parent.appendChild(row)
+}
+async function main() {
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    document.getElementById('body').appendChild(table);
+    // Creating and adding data to first row of the table
+    
+    CreateRow(["指導有無", "生徒名", "日時", "開始時刻", "終了時刻", "指導内容" ], "th", thead)
+
+    const button = document.querySelector('input[type="button"]')
+    button.addEventListener('click', async function(){
+        tbody.innerHTML = ""
+        const name = document.getElementById("name").value
+        const rawdate = document.getElementById("date").value
+        const fixedDate = rawdate.replace("-", "/")
+        const SearchResult = await Search(fixedDate, name)
+        while (SearchResult.length) {
+            const tmp = SearchResult.shift()
+            CreateRow(tmp, "td", tbody)
+        }
+    })
+
+}
+main()
+
+
+</script> 
+</body>
+</html>
